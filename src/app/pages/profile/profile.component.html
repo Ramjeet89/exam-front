@@ -1,0 +1,56 @@
+<mat-card *ngIf ="user">
+    <h1>Your Profile Details </h1>
+    <!-- {{ user | json }} -->
+    <mat-card-content>
+        <div class="bootstrap-wrapper">
+
+            <div class="container">
+                <div class="container text-center" >
+                    <img src="https://lh3.googleusercontent.com/6PDhBqhLcELzKlKAULKanhYnxYnJHpg3IF9gHCprLrP2JgH2BxpyNKSG17jPggnKP3m-8LpT-WXF8niaZjMz_CAJqjxce9nbwD_geyk5rQOMMsPqfR_erXeY4IUdmNO-HXcVz32Xg-eFsmpFeDUOkWzBgJoyF52pVxvvgjy5GIBKVfOzRFJu_deEQ-1YA-mJ5-7r6rfFVafowFUskv1Kafc0NmP0A3g0BuvsILT1I2Xojv-uGmOsgeuO_lXQp9mkIv1dUGy29q2AsjUCv1xFFkXoQOpG_3sKGuBzkv4uzO-tKSxWyDRFaJxUnIn_3lSV6Z1zB8zjs2hpMO2_cWPAlXwYv1rGOoOd1UPT9cFpP8Tw4O_XFn3p1gDkCLimeXsrQ3urt73qO53gEloc_Z_uyeJT72XJHm5Xw5YZx2V05T7HWWGIN7N07GR5NAexKaWTnNjy1DVyA6dfTbMEv3XEaCcSpglCPliT_CKT0s9mc4vPutexzbtyvp2HpvxuwAsQRgGij7_xhfHQK-Ia9mFaDtfGI0TjvSHnDrc-l1cOqerdWNzyJXAHN13Etcb8eHIQT09aKuKwIsYD4QXKScV3Luy2I5WYg-APoYZS1e61xDNnCUl-qR7EYmYwBrTf9JGzuOQCV3XpQIXOZ9lQc6COngM2ApJKudldyh5P2ay3E9xAInLwxRjVsKlFLi7SVqP9KdNt2cJDmE2BgAN7-pfYoXo=w402-h496-no?authuser=0"
+                     alt=""
+                    class="profile-image">
+                    <h1 class="mt20"> {{ user.firstName }} {{user.lastName }}</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 offset-md-1">
+
+            <!-- //table -->
+
+            <table class="table text-center">
+                <tr>
+                    <td>Username</td>
+                    <td>{{ user.username }}</td>
+                </tr>
+
+                <tr>
+                    <td>UserId</td>
+                    <td> EXAM{{user.userId }}</td>
+                </tr>
+                <!-- <tr *ngIf="user.phone"> -->
+                <tr>
+                    <td>Phone Number </td>
+                    <td>{{ user.phone }}</td>
+                </tr>
+
+                <tr>
+                    <td>Role </td>
+                    <td>{{ user.authorities[0].authority }}</td>
+                </tr>
+
+                <tr>
+                    <td>Status </td>
+                    <td>{{user.enabled?"ACTIVE":"NOTACTIVE"}}</td>
+                </tr>
+
+            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+
+    <mat-card-actions class="text-center">
+        <button mat-raised-button color="primary">UPDATE</button>
+        <button mat-raised-button color="accent">SHARE</button>
+      </mat-card-actions>
+</mat-card>
