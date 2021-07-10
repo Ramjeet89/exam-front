@@ -8,35 +8,40 @@ import baseUrl from './helper';
 export class QuestionService {
 
   constructor(
-    private _http:HttpClient) { }
+    private _http: HttpClient) { }
 
   //get questions//admin
-  public getQuestionOfQuiz(qid){
+  public getQuestionOfQuiz(qid) {
     return this._http.get(`${baseUrl}/question/quiz/all/${qid}`);
   }
 
   //user
-  public getQuestionOfQuizForTest(qid){
+  public getQuestionOfQuizForTest(qid) {
     return this._http.get(`${baseUrl}/question/quiz/${qid}`);
   }
 
   //add questions
-  public addQuestion(question){
+  public addQuestion(question) {
     return this._http.post(`${baseUrl}/question/`, question);
   }
 
   //delete question
-  public deleteQuestion(questionId){
+  public deleteQuestion(questionId) {
     return this._http.delete(`${baseUrl}/question/${questionId}`);
   }
 
   //get the single quiz
-    public getQuestion(quesId){
-      return this._http.get(`${baseUrl}/question/${quesId}`);
-    }
+  public getQuestion(quesId) {
+    return this._http.get(`${baseUrl}/question/${quesId}`);
+  }
 
   //update question
-  public updateQuestion(question){
-      return this._http.put(`${baseUrl}/question/`,question);
+  public updateQuestion(question) {
+    return this._http.put(`${baseUrl}/question/`, question);
+  }
+
+  //eval-quiz
+  public evalQuiz(questions) {
+    return this._http.post(`${baseUrl}/question/eval-quiz`, questions);
   }
 }

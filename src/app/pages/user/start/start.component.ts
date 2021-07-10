@@ -11,19 +11,20 @@ import Swal from 'sweetalert2';
 })
 export class StartComponent implements OnInit {
 
-qid;
-questions;
-marksGot = 0;
-correctAnswers = 0;
-attempted = 0;
-isSubmit = false;
-timer: any;
+  qid;
+  questions;
+  marksGot = 0;
+  correctAnswers = 0;
+  attempted = 0;
+
+  isSubmit = false;
+  timer: any;
 
 
   constructor(
-     private locationSt:LocationStrategy,
-     private _route:ActivatedRoute,
-     private _question:QuestionService) { }
+    private locationSt: LocationStrategy,
+    private _route: ActivatedRoute,
+    private _question: QuestionService) { }
 
   ngOnInit(): void {
     this.preventBackButton();
@@ -31,78 +32,95 @@ timer: any;
     console.log(this.qid);
     this.loadQuestiosn()
   }
-  loadQuestiosn(){
+  loadQuestiosn() {
     this._question.getQuestionOfQuizForTest(this.qid).subscribe(
-      (data:any)=>{
+      (data: any) => {
         this.questions = data;
         this.timer = this.questions.length * 2 * 60;
         this.questions.forEach((q) => {
           q['givenAnswer'] = '';
-        });  
-        console.log(this.questions); 
+        });
+        console.log(this.questions);
         this.startTimer();
-    },(error)=>{
+      }, (error) => {
         console.log(error);
-        Swal.fire('Error','Error in loading quiz','error');
-    });
-  }
-
-  preventBackButton(){
-      history.pushState(null,null,location.href);
-      this.locationSt.onPopState(()=>{
-        history.pushState(null,null,location.href);
+        Swal.fire('Error', 'Error in loading quiz', 'error');
       });
   }
 
-  submitQuiz(){
+  preventBackButton() {
+    history.pushState(null, null, location.href);
+    this.locationSt.onPopState(() => {
+      history.pushState(null, null, location.href);
+    });
+  }
+
+  submitQuiz() {
     Swal.fire({
       title: 'Do you want to submit the Quiz!!',
       //showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: `Submit`,
-     // denyButtonText: `Don't save`,
-      icon:'info',
-    }).then((e)=>{
-      if(e.isConfirmed){
+      // denyButtonText: `Don't save`,
+      icon: 'info',
+    }).then((e) => {
+      if (e.isConfirmed) {
         this.evalQuiz();
       }
     });
   }
 
-  startTimer(){
-   let t =  window.setInterval(()=>{
-      if(this.timer<=0){
+  startTimer() {
+    let t = window.setInterval(() => {
+      if (this.timer <= 0) {
         this.evalQuiz();
         clearInterval(t);
-      }else{
+      } else {
         this.timer--;
       }
-    },1000);
+    }, 1000);
   }
 
-  getFormattedTime(){
-    let mm = Math.floor(this.timer/60);
+  getFormattedTime() {
+    let mm = Math.floor(this.timer / 60);
     let ss = this.timer - mm * 60;
     return `${mm} min: ${ss} sec`;
   }
 
-  evalQuiz(){
-    this.isSubmit = true;
-    //calculate
-   // console.log(this.questions);
-   this.questions.forEach(q => {
-     if(q.givenAnswer == q.answer){
-       this.correctAnswers++;
-      let marksSingle =  this.questions[0].quiz.maxMarks/this.questions.length;
-      this.marksGot+=marksSingle;
-     }   
-     if(q.givenAnswer.trim()!=''){
-        this.attempted++;
-     }
-   });
-   console.log("Correct Answers:: "+this.correctAnswers);
-   console.log("Marks Got:: "+this.marksGot);
-   console.log("Attempted:: "+this.attempted);
-   console.log(this.questions);
+  evalQuiz() {
+
+    //call to server to check questions
+
+    this._question.evalQuiz(this.questions).subscribe(
+      (data: any) => {
+        console.log(data);
+
+        this.marksGot = data.marksGot;
+        this.correctAnswers = data.correctAnswers;
+        this.attempted = data.attempted;
+        this.isSubmit = true;
+      },
+      (error) => {
+        console.log(error);
+
+      }
+    )
+    // this.isSubmit = true;
+    // //calculate
+    // // console.log(this.questions);
+    // this.questions.forEach(q => {
+    //   if (q.givenAnswer == q.answer) {
+    //     this.correctAnswers++;
+    //     let marksSingle = this.questions[0].quiz.maxMarks / this.questions.length;
+    //     this.marksGot += marksSingle;
+    //   }
+    //   if (q.givenAnswer.trim() != '') {
+    //     this.attempted++;
+    //   }
+    // });
+    // console.log("Correct Answers:: " + this.correctAnswers);
+    // console.log("Marks Got:: " + this.marksGot);
+    // console.log("Attempted:: " + this.attempted);
+    // console.log(this.questions);
   }
 }
